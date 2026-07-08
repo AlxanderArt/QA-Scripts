@@ -18,3 +18,14 @@ def test_quality_gate_rejects_negative_counts():
     result = evaluate({"passed": -1, "failed": 0, "critical_defects": 0})
     assert result.passed is False
     assert result.reason == "result counts cannot be negative"
+
+
+def test_quality_gate_rejects_non_integer_counts():
+    malformed_values = ["many", "1", 1.5, True, None]
+    for field in ("passed", "failed", "critical_defects"):
+        for value in malformed_values:
+            payload: dict[str, object] = {"passed": 1, "failed": 0, "critical_defects": 0}
+            payload[field] = value
+            result = evaluate(payload)
+            assert result.passed is False
+            assert result.reason == "result counts must be integers"

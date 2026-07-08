@@ -30,11 +30,13 @@ def test_real_playwright_chromium_smoke():
     """Run a real browser smoke without external servers, credentials, or paid APIs."""
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch()
-        page = browser.new_page()
-        page.set_content(LOGIN_HTML)
-        expect(page.get_by_role("heading", name="QA Smoke Login")).to_be_visible()
-        page.get_by_label("Email").fill("qa@example.test")
-        page.get_by_label("Password").fill("synthetic-password")
-        page.get_by_role("button", name="Sign in").click()
-        expect(page.get_by_role("status")).to_have_text("Signed in")
-        browser.close()
+        try:
+            page = browser.new_page()
+            page.set_content(LOGIN_HTML)
+            expect(page.get_by_role("heading", name="QA Smoke Login")).to_be_visible()
+            page.get_by_label("Email").fill("qa@example.test")
+            page.get_by_label("Password").fill("synthetic-password")
+            page.get_by_role("button", name="Sign in").click()
+            expect(page.get_by_role("status")).to_have_text("Signed in")
+        finally:
+            browser.close()

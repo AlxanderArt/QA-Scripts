@@ -23,10 +23,19 @@ class GateResult:
         }
 
 
+def _read_count(results: dict[str, Any], key: str) -> int | None:
+    value = results.get(key, 0)
+    if type(value) is not int:
+        return None
+    return value
+
+
 def evaluate(results: dict[str, Any]) -> GateResult:
-    passed_count = int(results.get("passed", 0))
-    failed_count = int(results.get("failed", 0))
-    critical_defects = int(results.get("critical_defects", 0))
+    passed_count = _read_count(results, "passed")
+    failed_count = _read_count(results, "failed")
+    critical_defects = _read_count(results, "critical_defects")
+    if passed_count is None or failed_count is None or critical_defects is None:
+        return GateResult(0.0, 0, False, "result counts must be integers")
     if min(passed_count, failed_count, critical_defects) < 0:
         return GateResult(0.0, max(critical_defects, 0), False, "result counts cannot be negative")
     total = passed_count + failed_count
