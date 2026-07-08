@@ -1,4 +1,4 @@
-.PHONY: install lint type test reports standalone verify playwright-install clean
+.PHONY: install lint type test reports standalone verify ci playwright-install clean
 
 install:
 	python3 -m venv .venv
@@ -20,6 +20,7 @@ reports:
 	mkdir -p reports/generated
 	pytest -q --junitxml=reports/generated/junit.xml --html=reports/generated/report.html --self-contained-html
 
+# CI uses reports instead of test so one pytest run also produces uploaded artifacts.
 standalone:
 	python scripts/02_postman_collection_runner/run_collection.py
 	python scripts/06_sql_data_validation/sql_validation.py
@@ -38,6 +39,8 @@ standalone:
 	python scripts/20_synthetic_monitoring_probe/run_synthetic_monitor.py
 
 verify: lint type test reports standalone
+
+ci: lint type reports standalone
 
 clean:
 	rm -rf .pytest_cache .ruff_cache .mypy_cache reports/generated

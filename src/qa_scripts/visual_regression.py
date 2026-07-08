@@ -12,6 +12,8 @@ class VisualDiffResult:
 
 
 def compare_pixel_buffers(baseline: list[int], candidate: list[int], *, threshold: float = 0.01) -> VisualDiffResult:
+    if not 0 <= threshold <= 1:
+        raise ValueError("threshold must be between 0 and 1")
     if len(baseline) != len(candidate):
         raise ValueError("baseline and candidate must have the same pixel count")
     if not baseline:

@@ -17,6 +17,10 @@ class MonitorResult:
 
 
 def evaluate_monitor(check: MonitorCheck, *, max_latency_ms: int = 750) -> MonitorResult:
+    if not 100 <= check.status_code <= 599:
+        return MonitorResult(False, "invalid status code")
+    if check.latency_ms < 0 or max_latency_ms < 0:
+        return MonitorResult(False, "latency cannot be negative")
     if check.status_code >= 500:
         return MonitorResult(False, "server error")
     if check.status_code >= 400:

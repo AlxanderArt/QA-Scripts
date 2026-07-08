@@ -12,6 +12,8 @@ class FlakeSignal:
 
 
 def analyze_history(history: dict[str, list[bool]], *, min_transitions: int = 2) -> tuple[FlakeSignal, ...]:
+    if min_transitions < 1:
+        raise ValueError("min_transitions must be at least 1")
     signals: list[FlakeSignal] = []
     for test_name, outcomes in sorted(history.items()):
         if not outcomes:

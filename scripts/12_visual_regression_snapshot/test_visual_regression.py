@@ -12,3 +12,8 @@ def test_visual_regression_passes_under_threshold():
 def test_visual_regression_rejects_mismatched_buffers():
     with pytest.raises(ValueError, match="same pixel count"):
         compare_pixel_buffers([1], [1, 2])
+
+
+def test_visual_regression_rejects_invalid_threshold():
+    with pytest.raises(ValueError, match="between 0 and 1"):
+        compare_pixel_buffers([1], [1], threshold=1.5)
