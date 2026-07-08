@@ -1,9 +1,12 @@
-import json
-REQUIREMENT = "Users can reset a forgotten password using a verified email address."
-HEURISTICS = ["happy_path", "invalid_input", "expired_token", "rate_limit", "audit_logging", "accessibility"]
+from __future__ import annotations
 
-def generate(requirement=REQUIREMENT):
-    return [{"id": f"TC-{i+1:03d}", "heuristic": h, "requirement": requirement, "expected": f"Validate {h.replace('_', ' ')} behavior."} for i, h in enumerate(HEURISTICS)]
+import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
+
+from qa_scripts.test_case_generator import generate  # noqa: E402
 
 if __name__ == "__main__":
     print(json.dumps(generate(), indent=2))

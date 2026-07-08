@@ -1,12 +1,14 @@
-from pathlib import Path
-DEFECT = {"id": "BUG-1042", "title": "Checkout total does not include tax after coupon removal", "severity": "High", "steps": ["Add item to cart", "Apply coupon", "Remove coupon", "Proceed to checkout"], "expected": "Tax is recalculated after coupon removal.", "actual": "Checkout shows stale tax value.", "root_cause_prompt": "Review cart state invalidation after coupon mutation."}
+from __future__ import annotations
 
-def render(defect=DEFECT):
-    steps = "\n".join(f"{i+1}. {step}" for i, step in enumerate(defect["steps"]))
-    return f"# {defect['id']} - {defect['title']}\n\n**Severity:** {defect['severity']}\n\n## Steps to Reproduce\n{steps}\n\n## Expected\n{defect['expected']}\n\n## Actual\n{defect['actual']}\n\n## RCA Prompt\n{defect['root_cause_prompt']}\n"
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
+
+from qa_scripts.defect_reporter import SAMPLE_DEFECT, render  # noqa: E402
 
 if __name__ == "__main__":
-    out = Path("reports/generated/defect-BUG-1042.md")
+    out = Path("reports/generated") / f"defect-{SAMPLE_DEFECT.id}.md"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(render())
+    out.write_text(render(SAMPLE_DEFECT), encoding="utf-8")
     print(out)

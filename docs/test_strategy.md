@@ -1,8 +1,8 @@
 # Test Strategy
 
-This repository demonstrates a layered QA strategy:
+This repository demonstrates a layered QA strategy and a maintainable script architecture. Reusable logic lives under `src/qa_scripts/`; numbered script folders act as thin examples/entry points with local README files.
 
-1. API contract tests validate payload shape and negative paths.
+1. API contract tests validate payload shape, negative paths, duplicate protection, and resettable synthetic state.
 2. Collection runner checks emulate Postman/Newman workflows without GUI dependency.
 3. UI smoke tests show Page Object Model design.
 4. Cross-browser regression planning maps critical flows across browser families.

@@ -16,6 +16,8 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Static quality scan
+        run: ruff check .
       - name: Run test suite
         run: pytest -q
       - name: Run standalone scripts

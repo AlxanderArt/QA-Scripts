@@ -11,8 +11,13 @@ A practical QA/SDET automation portfolio repository with 10 runnable scripts cov
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+ruff check .
 pytest -q
 ```
+
+## Design standard
+
+The numbered folders are recruiter-friendly script examples. Shared, reusable logic lives in `src/qa_scripts/` so the repo demonstrates maintainable SDET architecture instead of one-off scripts. CI runs linting, all pytest tests, and the standalone CLI-style scripts.
 
 ## The 10 QA scripts
 

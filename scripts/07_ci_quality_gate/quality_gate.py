@@ -1,16 +1,15 @@
+from __future__ import annotations
+
 import json
 import sys
 from pathlib import Path
-MIN_PASS_RATE = 0.95
-MAX_CRITICAL_DEFECTS = 0
 
-def evaluate(results):
-    total = results["passed"] + results["failed"]
-    pass_rate = results["passed"] / total if total else 0
-    return {"pass_rate": pass_rate, "critical_defects": results.get("critical_defects", 0), "passed": pass_rate >= MIN_PASS_RATE and results.get("critical_defects", 0) <= MAX_CRITICAL_DEFECTS}
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
+
+from qa_scripts.quality_gate import evaluate  # noqa: E402
 
 if __name__ == "__main__":
     path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("reports/sample_outputs/test-results.json")
-    result = evaluate(json.loads(path.read_text()))
-    print(json.dumps(result, indent=2))
-    raise SystemExit(0 if result["passed"] else 1)
+    result = evaluate(json.loads(path.read_text(encoding="utf-8")))
+    print(json.dumps(result.as_dict(), indent=2))
+    raise SystemExit(0 if result.passed else 1)

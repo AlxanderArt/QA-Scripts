@@ -1,5 +1,6 @@
 from pathlib import Path
 
+
 def test_login_feature_has_given_when_then_acceptance_criteria():
     feature = Path(__file__).with_name("login.feature").read_text()
     assert "Feature:" in feature

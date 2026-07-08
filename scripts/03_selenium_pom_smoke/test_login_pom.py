@@ -1,5 +1,6 @@
 from apps.demo_web.page_model import LoginPage
 
+
 class FakeDriver:
     def __init__(self):
         self.values = {}
