@@ -30,6 +30,12 @@ One thing I focused on was making it feel like a real automation framework. The 
 
 From a QA workflow perspective, the repo shows how I think through automation: define the risk, validate expected and negative paths, make failures readable, keep test data synthetic and repeatable, and enforce release confidence through a quality gate.
 
+## Development story
+
+This repository was built iteratively to mirror how I approach QA/SDET work on a real team: start with working coverage, review the architecture, harden the failure paths, add CI quality gates, expand into release-confidence signals, and then perform a final senior-level pass for drift, data modeling, and boundary validation.
+
+The commit history is intentionally kept because it shows the engineering process behind the finished portfolio: baseline automation, reusable framework structure, malformed-input handling, type/lint/reporting gates, real Playwright browser smoke, Wave Two expansion, and final hardening. That progression demonstrates more than a static code drop — it shows review discipline, maintainability, and continuous improvement.
+
 ## Design standard
 
 The numbered folders are recruiter-friendly script examples. Shared, reusable logic lives in `src/qa_scripts/` so the repo demonstrates maintainable SDET architecture instead of one-off scripts. CI runs linting, type-checking, all pytest tests, real Playwright browser smoke, JUnit/HTML report generation, and standalone CLI-style scripts.
