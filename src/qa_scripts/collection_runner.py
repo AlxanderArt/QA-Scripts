@@ -36,16 +36,25 @@ def run_collection(path: Path) -> list[CollectionResult]:
     demo_api.reset_users()
     collection = _load_collection(path)
     results: list[CollectionResult] = []
-    for item in collection.get("items", []):
+    for index, item in enumerate(collection.get("items", []), start=1):
         failures: list[str] = []
         operation_name = item.get("operation")
+        item_name = str(item.get("name", operation_name or f"item {index}"))
+        if "expect_status" not in item:
+            results.append(CollectionResult(item_name, False, 0, 0, ("missing required field: expect_status",)))
+            continue
+
         operation = OPERATIONS.get(operation_name)
+        try:
+            expected_status = int(item.get("expect_status", 0))
+        except (TypeError, ValueError):
+            results.append(CollectionResult(item_name, False, 0, 0, ("expect_status must be an integer",)))
+            continue
         if operation is None:
-            results.append(CollectionResult(str(item.get("name", operation_name)), False, int(item.get("expect_status", 0)), 0, (f"unknown operation: {operation_name}",)))
+            results.append(CollectionResult(item_name, False, expected_status, 0, (f"unknown operation: {operation_name}",)))
             continue
 
         response = operation(*item.get("args", []))
-        expected_status = int(item["expect_status"])
         actual_status = int(response["status"])
         if actual_status != expected_status:
             failures.append(f"status {actual_status} != expected {expected_status}")
@@ -54,7 +63,7 @@ def run_collection(path: Path) -> list[CollectionResult]:
                 failures.append(f"missing response key: {key}")
         if "expect_error" in item and response["body"].get("error") != item["expect_error"]:
             failures.append(f"error {response['body'].get('error')!r} != expected {item['expect_error']!r}")
-        results.append(CollectionResult(str(item["name"]), not failures, expected_status, actual_status, tuple(failures)))
+        results.append(CollectionResult(item_name, not failures, expected_status, actual_status, tuple(failures)))
     return results
 
 

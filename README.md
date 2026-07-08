@@ -37,3 +37,17 @@ The numbered folders are recruiter-friendly script examples. Shared, reusable lo
 ## Portfolio coverage
 
 See [`docs/recruiter_map.md`](docs/recruiter_map.md) and [`docs/test_strategy.md`](docs/test_strategy.md).
+
+## Full verification workflow
+
+```bash
+ruff check .
+pytest -q
+python scripts/02_postman_collection_runner/run_collection.py
+python scripts/06_sql_data_validation/sql_validation.py
+python scripts/07_ci_quality_gate/quality_gate.py reports/sample_outputs/test-results.json
+python scripts/08_defect_lifecycle_reporter/defect_reporter.py
+python scripts/09_ai_assisted_test_case_generator/generate_test_cases.py
+```
+
+Generated files, caches, virtual environments, and local environment files are ignored by git.

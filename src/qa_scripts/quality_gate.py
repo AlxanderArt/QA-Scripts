@@ -27,6 +27,8 @@ def evaluate(results: dict[str, Any]) -> GateResult:
     passed_count = int(results.get("passed", 0))
     failed_count = int(results.get("failed", 0))
     critical_defects = int(results.get("critical_defects", 0))
+    if min(passed_count, failed_count, critical_defects) < 0:
+        return GateResult(0.0, max(critical_defects, 0), False, "result counts cannot be negative")
     total = passed_count + failed_count
     if total <= 0:
         return GateResult(0.0, critical_defects, False, "no test results supplied")

@@ -12,3 +12,9 @@ def test_quality_gate_fails_empty_or_critical_runs():
     critical = evaluate({"passed": 100, "failed": 0, "critical_defects": 1})
     assert critical.passed is False
     assert critical.reason == "critical defects exceed threshold"
+
+
+def test_quality_gate_rejects_negative_counts():
+    result = evaluate({"passed": -1, "failed": 0, "critical_defects": 0})
+    assert result.passed is False
+    assert result.reason == "result counts cannot be negative"
