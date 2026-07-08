@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qa-scripts"
-version = "1.1.0"
+version = "1.2.0"
 description = "QA/SDET automation portfolio scripts"
 requires-python = ">=3.11"
 
@@ -25,3 +25,14 @@ exclude = [".venv", "reports/generated"]
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]
 ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+mypy_path = "src"
+packages = ["qa_scripts", "apps"]
+files = ["scripts"]
+ignore_missing_imports = true
+check_untyped_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+exclude = [".venv", "reports/generated"]

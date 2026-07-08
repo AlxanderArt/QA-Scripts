@@ -2,3 +2,6 @@ pytest==8.3.4
 requests==2.32.3
 jsonschema==4.23.0
 ruff==0.8.6
+mypy==1.14.1
+pytest-html==4.1.1
+playwright==1.49.1

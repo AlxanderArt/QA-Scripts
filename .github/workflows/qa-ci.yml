@@ -16,10 +16,16 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Install Playwright browser
+        run: python -m playwright install --with-deps chromium
       - name: Static quality scan
         run: ruff check .
-      - name: Run test suite
-        run: pytest -q
+      - name: Type check
+        run: mypy src apps scripts
+      - name: Run test suite with reports
+        run: |
+          mkdir -p reports/generated
+          pytest -q --junitxml=reports/generated/junit.xml --html=reports/generated/report.html --self-contained-html
       - name: Run standalone scripts
         run: |
           python scripts/02_postman_collection_runner/run_collection.py
@@ -27,3 +33,9 @@ jobs:
           python scripts/07_ci_quality_gate/quality_gate.py reports/sample_outputs/test-results.json
           python scripts/08_defect_lifecycle_reporter/defect_reporter.py
           python scripts/09_ai_assisted_test_case_generator/generate_test_cases.py
+      - name: Upload QA reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-script-reports
+          path: reports/generated/
