@@ -1,0 +1,27 @@
+name: QA Scripts CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run test suite
+        run: pytest -q
+      - name: Run standalone scripts
+        run: |
+          python scripts/02_postman_collection_runner/run_collection.py
+          python scripts/06_sql_data_validation/sql_validation.py
+          python scripts/07_ci_quality_gate/quality_gate.py reports/sample_outputs/test-results.json
+          python scripts/08_defect_lifecycle_reporter/defect_reporter.py
+          python scripts/09_ai_assisted_test_case_generator/generate_test_cases.py

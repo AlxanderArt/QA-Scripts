@@ -1,0 +1,39 @@
+{
+  "name": "Demo API Collection",
+  "items": [
+    {
+      "name": "Get user",
+      "operation": "get_user",
+      "args": [
+        1
+      ],
+      "expect_status": 200,
+      "expect_keys": [
+        "id",
+        "name",
+        "email"
+      ]
+    },
+    {
+      "name": "Missing user",
+      "operation": "get_user",
+      "args": [
+        999
+      ],
+      "expect_status": 404,
+      "expect_error": "not_found"
+    },
+    {
+      "name": "Create invalid user",
+      "operation": "create_user",
+      "args": [
+        {
+          "name": "",
+          "email": "bad"
+        }
+      ],
+      "expect_status": 400,
+      "expect_error": "invalid_user"
+    }
+  ]
+}

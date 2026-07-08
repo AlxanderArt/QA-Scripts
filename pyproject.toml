@@ -1,0 +1,11 @@
+[project]
+name = "qa-scripts"
+version = "1.0.0"
+description = "QA/SDET automation portfolio scripts"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["scripts"]
+python_files = ["test_*.py", "*_test.py"]
+pythonpath = ["."]
+addopts = "-q"
